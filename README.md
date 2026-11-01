@@ -28,11 +28,13 @@ Los ingresos se guardan **solo en ese celular**, dentro del navegador. No se env
 - No borres los datos del navegador ni desinstales la app hasta haber exportado.
 - **Ajustes → Borrar todos los ingresos** deja la app lista para otro evento (pide escribir BORRAR).
 
-## Publicarla
+## Dónde está publicada
 
-La cámara del celular solo funciona si la app se abre desde una dirección `https://`. La forma más simple y gratuita es GitHub Pages: se sube esta carpeta a un repositorio y queda en `https://<usuario>.github.io/<repositorio>/`.
+**https://rauul-sys.github.io/asistencia-feria-utp/**
 
-Cuando cambies algo, sube el número de `CACHE` en `sw.js` (por ejemplo `asistencia-utp-v2`) para que los celulares descarguen la versión nueva.
+Está en GitHub Pages porque la cámara del celular solo funciona si la app se abre desde una dirección `https://`. El repositorio es público: cualquiera puede ver el código, pero solo la cuenta dueña puede cambiarlo, y los ingresos nunca se suben ahí.
+
+Cuando cambies algo, sube el número de `CACHE` en `sw.js` (por ejemplo `asistencia-utp-v2`), haz commit y push. GitHub publica la versión nueva en uno o dos minutos y los celulares la toman al abrir la app con internet.
 
 ## Probarla en la PC
 
