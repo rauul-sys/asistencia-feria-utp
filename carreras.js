@@ -1,0 +1,67 @@
+// Carreras de pregrado de la UTP, tomadas de utp.edu.pe/pregrado el 1 de noviembre de 2026.
+// Esta es la lista por defecto: se puede cambiar desde Ajustes sin tocar este archivo.
+const CARRERAS_UTP = [
+  {
+    facultad: 'Ingeniería',
+    carreras: [
+      'Ingeniería Aeronáutica',
+      'Ingeniería Ambiental',
+      'Ingeniería Automotriz',
+      'Ingeniería Biomédica',
+      'Ingeniería Civil',
+      'Ingeniería de Ciberseguridad',
+      'Ingeniería de Minas',
+      'Ingeniería de Seguridad Industrial y Minera',
+      'Ingeniería de Sistemas e Informática',
+      'Ingeniería de Software',
+      'Ingeniería de Telecomunicaciones',
+      'Ingeniería Eléctrica y de Potencia',
+      'Ingeniería Electrónica',
+      'Ingeniería Empresarial',
+      'Ingeniería Industrial',
+      'Ingeniería Mecánica',
+      'Ingeniería Mecatrónica',
+    ],
+  },
+  {
+    facultad: 'Negocios',
+    carreras: [
+      'Administración Banca y Finanzas',
+      'Administración de Empresas',
+      'Administración de Negocios Internacionales',
+      'Administración Hotelera y de Turismo',
+      'Administración y Gestión Pública',
+      'Administración y Marketing',
+      'Administración y Recursos Humanos',
+      'Contabilidad',
+      'Economía',
+    ],
+  },
+  {
+    facultad: 'Salud',
+    carreras: [
+      'Enfermería',
+      'Farmacia y Bioquímica',
+      'Nutrición y Dietética',
+      'Obstetricia',
+      'Odontología',
+      'Tecnología Médica en Laboratorio Clínico y Anatomía Patológica',
+      'Tecnología Médica en Terapia Física y Rehabilitación',
+    ],
+  },
+  { facultad: 'Medicina', carreras: ['Medicina'] },
+  { facultad: 'Derecho', carreras: ['Derecho'] },
+  { facultad: 'Psicología', carreras: ['Psicología'] },
+  {
+    facultad: 'Comunicaciones',
+    carreras: [
+      'Ciencias de la Comunicación',
+      'Comunicación Corporativa',
+      'Comunicación y Publicidad',
+      'Diseño Digital Publicitario',
+      'Diseño Profesional Gráfico',
+    ],
+  },
+  { facultad: 'Arquitectura', carreras: ['Arquitectura', 'Diseño Profesional de Interiores'] },
+  { facultad: 'Educación', carreras: ['Educación Inicial', 'Educación Primaria'] },
+];

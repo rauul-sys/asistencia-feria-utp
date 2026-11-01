@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Asistencia Feria UTP</title>
+<meta name="description" content="Registra el ingreso a la feria escaneando el carné de cada estudiante y su carrera.">
+<meta name="theme-color" content="#D3052D" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#B8042A" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Asistencia">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@600;700&family=Libre+Franklin:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-escanear" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M7 12h10"/></symbol>
+  <symbol id="i-lista" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-ajustes" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+  <symbol id="i-camara" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h2.2l1.6-2h6.4l1.6 2H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-linterna" viewBox="0 0 24 24"><path d="M8 2h8v4l-2 4v12h-4V10L8 6z"/><path d="M8 6h8M12 14v2"/></symbol>
+  <symbol id="i-girar" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8M4 4v4h4M4 13a8 8 0 0 0 14.3 4.9L20 16M20 20v-4h-4"/></symbol>
+  <symbol id="i-apagar" viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M6.3 7.3a8 8 0 1 0 11.4 0"/></symbol>
+  <symbol id="i-teclado" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></symbol>
+  <symbol id="i-foto" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+  <symbol id="i-descargar" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+  <symbol id="i-compartir" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+</svg>
+
+<div class="app">
+  <header class="cabecera">
+    <div class="cabecera-evento">
+      <p class="cabecera-etq">Registro de ingreso</p>
+      <p class="cabecera-titulo" id="txtEvento">Feria de Emprendimientos</p>
+      <p class="cabecera-puerta" id="txtPuerta">Puerta principal</p>
+    </div>
+    <div class="cabecera-contador" aria-live="polite">
+      <span class="cabecera-num" id="txtTotal">0</span>
+      <span class="cabecera-num-etq">ingresos</span>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <!-- Escanear -->
+    <section class="vista" id="vista-escanear" aria-label="Escanear">
+      <div class="visor" id="visor" data-estado="apagado">
+        <div id="lector"></div>
+        <div class="visor-panel">
+          <svg class="ico visor-icono" aria-hidden="true"><use href="#i-camara"/></svg>
+          <p class="visor-msg" id="visorMsg">Apunta la cámara al código de barras o QR del carné.</p>
+          <button class="btn btn-primario" id="btnActivar" type="button">Activar cámara</button>
+        </div>
+        <div class="visor-sup">
+          <span class="chip-estado"><span class="punto" aria-hidden="true"></span><span id="chipTexto">Escaneando</span></span>
+          <div class="visor-botones">
+            <button class="btn-redondo" id="btnLinterna" type="button" aria-label="Linterna" aria-pressed="false" hidden><svg class="ico" aria-hidden="true"><use href="#i-linterna"/></svg></button>
+            <button class="btn-redondo" id="btnCambiarCam" type="button" aria-label="Cambiar de cámara" hidden><svg class="ico" aria-hidden="true"><use href="#i-girar"/></svg></button>
+            <button class="btn-redondo" id="btnApagar" type="button" aria-label="Apagar cámara"><svg class="ico" aria-hidden="true"><use href="#i-apagar"/></svg></button>
+          </div>
+        </div>
+        <p class="visor-pista">Centra el código dentro del marco</p>
+        <div class="visor-destello" id="visorDestello" aria-hidden="true"></div>
+      </div>
+
+      <div class="fila-acciones">
+        <button class="btn btn-secundario" id="btnManual" type="button"><svg class="ico" aria-hidden="true"><use href="#i-teclado"/></svg>Escribir código</button>
+        <button class="btn btn-secundario" id="btnFoto" type="button"><svg class="ico" aria-hidden="true"><use href="#i-foto"/></svg>Leer foto</button>
+        <input type="file" id="inpFoto" accept="image/*" capture="environment" hidden>
+      </div>
+
+      <div class="bloque">
+        <div class="bloque-cab">
+          <h2>Últimos ingresos</h2>
+          <button class="enlace" type="button" data-ir="registros">Ver todos</button>
+        </div>
+        <ol class="lista" id="listaUltimos"></ol>
+        <p class="vacio" id="ultimosVacio">Aún no hay ingresos. Escanea el primer carné para empezar.</p>
+      </div>
+      <div id="lectorArchivo" hidden></div>
+    </section>
+
+    <!-- Registros -->
+    <section class="vista" id="vista-registros" aria-label="Registros" hidden>
+      <div class="cifras">
+        <div class="cifra"><span class="cifra-num" id="cfIngresos">0</span><span class="cifra-etq">ingresos</span></div>
+        <div class="cifra"><span class="cifra-num" id="cfUnicos">0</span><span class="cifra-etq">estudiantes</span></div>
+        <div class="cifra"><span class="cifra-num" id="cfCarreras">0</span><span class="cifra-etq">carreras</span></div>
+      </div>
+
+      <div class="fila-acciones">
+        <button class="btn btn-primario" id="btnExcel" type="button"><svg class="ico" aria-hidden="true"><use href="#i-descargar"/></svg>Descargar Excel</button>
+        <button class="btn btn-secundario" id="btnCompartir" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-compartir"/></svg>Compartir Excel</button>
+        <button class="btn btn-secundario" id="btnCsv" type="button">CSV</button>
+      </div>
+
+      <div class="bloque">
+        <h2>Por carrera</h2>
+        <ol class="resumen" id="listaResumen"></ol>
+        <p class="vacio" id="resumenVacio">Cuando registres ingresos verás aquí cuántos hay por carrera.</p>
+      </div>
+
+      <div class="bloque">
+        <h2>Todos los ingresos</h2>
+        <input type="search" id="buscarRegistro" class="campo" placeholder="Buscar por código o carrera" autocomplete="off">
+        <ol class="lista" id="listaRegistros"></ol>
+        <p class="vacio" id="registrosVacio">No hay ingresos que coincidan.</p>
+        <p class="nota">Toca un ingreso para cambiar su carrera o eliminarlo.</p>
+      </div>
+    </section>
+
+    <!-- Ajustes -->
+    <section class="vista" id="vista-ajustes" aria-label="Ajustes" hidden>
+      <div class="grupo-aj">
+        <h2>Evento</h2>
+        <label class="etq" for="ajEvento">Nombre del evento
+          <input class="campo" id="ajEvento" type="text" autocomplete="off">
+        </label>
+        <label class="etq" for="ajPuerta">Puerta o equipo
+          <input class="campo" id="ajPuerta" type="text" autocomplete="off">
+          <span class="nota">Si usan varios celulares, pon un nombre distinto en cada uno. Sale en el Excel.</span>
+        </label>
+      </div>
+
+      <div class="grupo-aj">
+        <h2>Al escanear</h2>
+        <label class="conmutador" for="ajPedirCarrera"><span>Pedir la carrera después de cada código</span><input class="interruptor" id="ajPedirCarrera" type="checkbox"></label>
+        <label class="conmutador" for="ajAvisarDuplicados"><span>Avisar si el código ya ingresó</span><input class="interruptor" id="ajAvisarDuplicados" type="checkbox"></label>
+        <label class="conmutador" for="ajSonido"><span>Sonido</span><input class="interruptor" id="ajSonido" type="checkbox"></label>
+        <label class="conmutador" for="ajVibracion"><span>Vibración</span><input class="interruptor" id="ajVibracion" type="checkbox"></label>
+      </div>
+
+      <div class="grupo-aj">
+        <h2>Carreras</h2>
+        <p class="nota">Una carrera por línea. Una línea que empieza con # es el nombre de la facultad.</p>
+        <textarea class="campo campo-lista" id="ajCarreras" spellcheck="false" aria-label="Lista de carreras"></textarea>
+        <div class="fila-acciones">
+          <button class="btn btn-primario" id="btnGuardarCarreras" type="button">Guardar lista</button>
+          <button class="btn btn-secundario" id="btnRestaurarCarreras" type="button">Volver a la lista UTP</button>
+        </div>
+      </div>
+
+      <div class="grupo-aj">
+        <h2>Datos</h2>
+        <p class="nota" id="ajResumenDatos"></p>
+        <p class="nota">Los ingresos se guardan solo en este celular, aunque no haya internet. Descarga el Excel cada cierto tiempo como respaldo.</p>
+        <button class="btn btn-peligro" id="btnBorrarTodo" type="button">Borrar todos los ingresos</button>
+      </div>
+
+      <div class="grupo-aj">
+        <h2>Instalar</h2>
+        <p class="nota">Instálala para abrirla como una app y usarla sin internet. En Android: menú ⋮ → Instalar app. En iPhone: Compartir → Agregar a inicio.</p>
+        <button class="btn btn-secundario" id="btnInstalar" type="button" hidden>Instalar en este celular</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="pestanas" aria-label="Secciones">
+    <button class="pestana" type="button" data-vista="escanear" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#i-escanear"/></svg><span>Escanear</span></button>
+    <button class="pestana" type="button" data-vista="registros"><svg class="ico" aria-hidden="true"><use href="#i-lista"/></svg><span>Registros</span></button>
+    <button class="pestana" type="button" data-vista="ajustes"><svg class="ico" aria-hidden="true"><use href="#i-ajustes"/></svg><span>Ajustes</span></button>
+  </nav>
+</div>
+
+<!-- Hoja para elegir la carrera -->
+<dialog class="hoja" id="dlgHoja" aria-labelledby="hojaCodigo">
+  <div class="hoja-cab">
+    <p class="hoja-etq" id="hojaEtq">Nuevo ingreso</p>
+    <p class="hoja-codigo" id="hojaCodigo" tabindex="-1" autofocus></p>
+    <p class="hoja-meta" id="hojaMeta"></p>
+    <p class="hoja-aviso" id="hojaAviso" hidden></p>
+    <div class="hoja-dup" id="hojaDup" hidden>
+      <button class="btn btn-primario" id="btnIgnorarDup" type="button">Ignorar</button>
+      <button class="btn btn-secundario" id="btnRegistrarDup" type="button">Registrar otra vez</button>
+    </div>
+  </div>
+  <div class="hoja-cuerpo" id="hojaCuerpo">
+    <div class="hoja-buscar">
+      <input type="search" id="buscarCarrera" class="campo" placeholder="Buscar carrera" autocomplete="off" aria-label="Buscar carrera">
+    </div>
+    <div class="recientes" id="recientes"></div>
+    <div id="listaCarreras"></div>
+    <p class="vacio" id="carrerasVacio" hidden>No hay carreras con ese nombre. Puedes agregarla en Ajustes.</p>
+  </div>
+  <div class="hoja-pie" id="hojaPie"></div>
+</dialog>
+
+<!-- Escribir código a mano -->
+<dialog class="modal" id="dlgManual" aria-labelledby="manualTitulo">
+  <form id="frmManual" class="modal-cuerpo">
+    <h2 class="modal-titulo" id="manualTitulo">Escribir código</h2>
+    <label class="etq" for="inpManual">Código de estudiante
+      <input class="campo campo-mono" id="inpManual" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="U20231234" required>
+    </label>
+    <div class="modal-pie">
+      <button class="btn btn-secundario" id="btnManualCancelar" type="button">Cancelar</button>
+      <button class="btn btn-primario" type="submit">Continuar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Confirmación -->
+<dialog class="modal" id="dlgConfirmar" aria-labelledby="confTitulo">
+  <div class="modal-cuerpo">
+    <h2 class="modal-titulo" id="confTitulo"></h2>
+    <p class="nota" id="confTexto"></p>
+    <label class="etq" for="confInput" id="confCampo" hidden><span id="confEtq"></span>
+      <input class="campo campo-mono" id="confInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    </label>
+    <div class="modal-pie">
+      <button class="btn btn-secundario" id="confCancelar" type="button">Cancelar</button>
+      <button class="btn btn-peligro-lleno" id="confAceptar" type="button">Eliminar</button>
+    </div>
+  </div>
+</dialog>
+
+<div class="aviso" id="aviso" role="status" aria-live="polite" hidden></div>
+
+<script src="lib/html5-qrcode.min.js"></script>
+<script src="lib/xlsx.mini.min.js"></script>
+<script src="carreras.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
